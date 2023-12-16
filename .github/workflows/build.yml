@@ -1,4 +1,4 @@
-name: Build Java Spring Project with Gradle
+name: Build
 
 on:
   push:
