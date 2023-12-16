@@ -3,15 +3,18 @@ package com.creation.kitchen.crud.data;
 import com.creation.kitchen.crud.domain.Post;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class InMemoryPostRepository implements PostRepository {
 
-    private Map<Long, Post> posts = new HashMap<>();
+    private final Map<Long, Post> posts = new ConcurrentHashMap<>();
+
+    @Override
+    public Optional<Post> getPostById(Long id) {
+        return Optional.ofNullable(posts.get(id));
+    }
 
     @Override
     public List<Post> getAllPosts() {
@@ -25,20 +28,20 @@ public class InMemoryPostRepository implements PostRepository {
     }
 
     @Override
-    public Post deletePostById(Long id) {
-        Post post = posts.get(id);
-        posts.remove(id);
-        return post;
+    public void deletePostById(Long id) {
+        Optional.ofNullable(posts.get(id))
+                .ifPresent(post -> {
+                    posts.remove(id);
+                });
     }
 
     @Override
-    public Post editPost(Long id, Post updated) {
-        Post target = posts.get(id);
-        if (target == null) {
-            return null;
-        }
-        target.setContent(updated.getContent());
-        target.setTitle(updated.getTitle());
-        return target;
+    public Optional<Post> editPost(Long id, Post updated) {
+        Optional<Post> post = Optional.ofNullable(posts.get(id));
+        post.ifPresent(p -> {
+                    p.setTitle(updated.getTitle());
+                    p.setContent(updated.getContent());
+                });
+        return post;
     }
 }
