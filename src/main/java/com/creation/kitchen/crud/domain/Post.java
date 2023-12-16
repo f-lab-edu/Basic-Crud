@@ -1,18 +1,20 @@
 package com.creation.kitchen.crud.domain;
 
 public class Post {
-    private long id;
+    private final Long id;
 
     private String title;
 
     private String content;
 
-    public long getId() {
-        return id;
+    public Post(Long id, String title, String content) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {

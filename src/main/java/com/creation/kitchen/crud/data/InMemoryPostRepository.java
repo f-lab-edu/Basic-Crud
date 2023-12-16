@@ -44,4 +44,8 @@ public class InMemoryPostRepository implements PostRepository {
                 });
         return post;
     }
+
+    public void clearPosts() {
+        posts.clear();
+    }
 }
